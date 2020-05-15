@@ -1,8 +1,10 @@
 import {Entretien} from "../../model/Entretien";
-import Candidats from "../../infrastructure/Candidats";
 import Entretiens from "./entretiens.interface";
 import Recruteurs from "./recruteurs.interface";
 import Salles from "./salles.interface";
+import {SalleMapper} from "../../common/mapper/Salle.mapper";
+import {EntretienMapper} from "../../common/mapper/Entretien.mapper";
+import Candidats from "./candidats.interface";
 
 export class CreerEntretien {
     entretien: Entretien;
@@ -26,13 +28,27 @@ export class CreerEntretien {
             throw new Error('Pas de recruteurs disponible');
         }
 
-        // faire un agrégat salle côté entretien
-        const salle = this.salleRepository.trouverSalleLibre(demande.getHoraireEntretien());
-        const candidat = this.candidatRepository.findById(demande.getCandidatId());
+        const dtoSalle = this.salleRepository.trouverSalleLibre(demande.getHoraireEntretien());
+        if(!dtoSalle){
+            throw new Error('Pas de salle disponible');
+        }
 
+        const salle = new SalleMapper().toModel(dtoSalle);
+
+        const candidat = this.candidatRepository.findById(demande.getCandidatId());
+        if(!candidat){
+            throw new Error('Candidat inexistant');
+        }
+
+        const recruteur = listRecruteurs[0];
+        if(recruteur.anneeExperience <= candidat.anneeExperience){
+            throw new Error('Recruteur inexpérimenté');
+        }
         // WHEN
-        this.entretien = new Entretien(demande.getHoraireEntretien(), listRecruteurs[0], salle, candidat);
+        this.entretien = new Entretien(demande.getHoraireEntretien(), recruteur, salle, candidat, false, false);
+        const entretienDto = new EntretienMapper().toDTO(this.entretien);
+
         // THEN
-        this.entretienRepository.addEntretien(this.entretien);
+        this.entretienRepository.addEntretien(entretienDto);
     }
 }

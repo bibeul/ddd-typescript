@@ -1,4 +1,4 @@
-export default class defaultEntretien{
+export default class demandeEntretien{
     horaire;
     candidatId;
     constructor(horaire, candidatId) {

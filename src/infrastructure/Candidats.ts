@@ -1,23 +1,16 @@
-import Entretiens from "../use_case/entretien/entretiens.interface";
-import Candidat from "../model/Candidat";
-import {Entretien} from "../model/Entretien";
+import CandidatDto from "../common/dto/CandidatDto";
+import Candidats from "../use_case/entretien/candidats.interface";
 
-export default class CandidatsRepository implements Entretiens {
-    entretiens: Entretien[];
+export default class CandidatsRepository implements Candidats {
+    candidats: CandidatDto[];
 
-    findByCandidat(candidat: string): Candidat{
-        return;
+    findById(id: string): CandidatDto{
+        for(const candidat of this.candidats){
+            if(candidat.id === id) return candidat;
+        }
     };
 
-    findById(id: string): Candidat{
-        return;
-    };
-
-    findEntretiens(): Entretien[]{
-        return;
-    };
-
-    addEntretien(entretien: Entretien): void {
-        this.entretiens.push(entretien)
+    addCandidat(candidat: CandidatDto): void {
+        this.candidats.push(candidat)
     };
 }

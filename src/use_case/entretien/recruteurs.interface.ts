@@ -1,11 +1,10 @@
-import Recruteur from "../../model/Recruteur";
+import RecruteurDto from "../../common/dto/RecruteurDto";
 
 interface Recruteurs{
-    findBySkill(skill: string): Recruteur;
-    findById(id: string): Recruteur;
-    findRecruteurs(): Recruteur[];
-    addRecruteur(recruteur: Recruteur): void;
-    trouveRecruteursDisponible(horaire): Recruteur[];
+    findById(id: string): RecruteurDto;
+    findRecruteurs(): RecruteurDto[];
+    addRecruteur(recruteur: RecruteurDto): void;
+    trouveRecruteursDisponible(horaire): RecruteurDto[];
 }
 
 export default Recruteurs;
